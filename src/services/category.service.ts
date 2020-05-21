@@ -4,6 +4,7 @@ import {Category, ICategory} from "../models/category.model";
 import {LanguageService} from "../services/language.service";
 
 import { MongooseDocument } from "mongoose";
+import {Language}  from "../models/language.model";
 
 
 class CategoryHelpers{
@@ -19,10 +20,27 @@ class CategoryHelpers{
             }); 
         });
     }
+
+    GetLanguages(filter: any):Promise<any>{        
+        return new Promise<any>( (resolve) => {
+            Language.find(filter,(err:Error,Language:any)=>{
+                if(err){
+                    console.log(err);
+                }else{
+                    resolve(Language);
+                }
+            });
+        });
+     }
 }
 
 
 export class CategoryService extends CategoryHelpers{
+
+    public async getCategory(req:Request, res:Response){
+            const lan:any = await super.GetLanguages({category:(req.params.id)});
+            res.status(200).json(lan);
+       }
 
     public getAll(req:Request, res:Response){
         Category.find({},(err:Error, categories: MongooseDocument)=>{
@@ -44,6 +62,7 @@ export class CategoryService extends CategoryHelpers{
                 foreignField:"category",
                 as: "l"
             }
+            
         }],(err:Error,data:any)=>{
             if(err){
                 res.status(401).send(err);

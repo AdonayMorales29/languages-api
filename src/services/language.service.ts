@@ -19,6 +19,7 @@ class LanguageHelpers{
             }); 
         });
     }
+   
 }
 
 
@@ -77,6 +78,8 @@ export class LanguageService extends LanguageHelpers{
         const lan:any = await super.GetLanguage({_id:req.params.id});
         res.status(200).json(lan[0]);
     }
+
+   
 
     public async updateOne(req:Request, res:Response){       
         const old_lan:any = await super.GetLanguage({
